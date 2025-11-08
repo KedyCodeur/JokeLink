@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Şüpheli Site</title>
+
+<style>
+    body {
+        margin: 0;
+        background: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: white;
+        overflow: hidden;
+    }
+
+    #player {
+        width: 100vw;
+        height: 100vh;
+        border: none;
+        display: none;
+    }
+
+    /* Ekranı kaplayan görünmez tuzak */
+    #hiddenBtn {
+        width: 100vw;
+        height: 100vh;
+        cursor: pointer;
+        background: transparent;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: none;
+        z-index: 1;
+    }
+
+    /* Görünen buton */
+    #realBtn {
+        padding: 20px 40px;
+        font-size: 24px;
+        background: green;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        cursor: pointer;
+        z-index: 9999;
+        position: relative;
+    }
+
+    #realBtn:hover {
+        background: green;
+    }
+</style>
+</head>
+<body>
+
+<!-- GÖRÜNEN BUTON -->
+<button id="realBtn">Şüpheli Buton</button>
+
+<!-- GÖRÜNMEYEN (tuzak) -->
+<button id="hiddenBtn"></button>
+
+<!-- Video -->
+<div id="player"></div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+
+<script>
+let player;
+let userClicked = false;
+
+// YouTube API video yükler
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player("player", {
+        videoId: "UZw7y0-txpI",
+        playerVars: {
+            autoplay: 1,
+            mute: 1,
+            controls: 0,
+            playsinline: 1
+        }
+    });
+}
+
+// görünür butona basılırsa gizli buton tetiklenir
+document.getElementById("realBtn").onclick = () => {
+    document.getElementById("hiddenBtn").click();
+};
+
+// görünmeyen tuzak buton
+document.getElementById("hiddenBtn").onclick = () => {
+    if (userClicked) return;
+    userClicked = true;
+
+    document.getElementById("realBtn").style.display = "none";   // görünen buton kaybolur
+    document.getElementById("hiddenBtn").style.display = "none"; // tuzak da kaybolur
+    document.getElementById("player").style.display = "block";   // video çıkar
+
+    player.unMute();
+    player.playVideo();
+};
+</script>
+
+</body>
+</html>
